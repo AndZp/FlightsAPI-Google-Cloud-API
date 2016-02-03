@@ -21,6 +21,14 @@ public class Country {
 
 	private List<String> citiesKeysInCountry = new ArrayList<>(0);
 
+	private Country() {
+	}
+
+	public Country(String name, String code) {
+		this.name = name;
+		this.code = code;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -51,6 +59,11 @@ public class Country {
 
 	public void addToCitiesKeysInCountry(String cityKey) {
 		citiesKeysInCountry.add(cityKey);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }
