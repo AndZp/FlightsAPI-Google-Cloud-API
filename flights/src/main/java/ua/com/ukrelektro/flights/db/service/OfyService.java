@@ -4,8 +4,10 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
+import ua.com.ukrelektro.flights.db.models.Aircraft;
 import ua.com.ukrelektro.flights.db.models.City;
 import ua.com.ukrelektro.flights.db.models.Country;
+import ua.com.ukrelektro.flights.db.models.Flight;
 
 /**
  * Custom Objectify Service that this application should use.
@@ -17,6 +19,9 @@ public class OfyService {
 	static {
 		factory().register(City.class);
 		factory().register(Country.class);
+		factory().register(Aircraft.class);
+		factory().register(Flight.class);
+
 	}
 
 	/**

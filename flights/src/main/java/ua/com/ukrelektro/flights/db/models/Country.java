@@ -1,9 +1,5 @@
 package ua.com.ukrelektro.flights.db.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -18,8 +14,6 @@ public class Country {
 	String desc;
 
 	String code;
-
-	private List<String> citiesKeysInCountry = new ArrayList<>(0);
 
 	private Country() {
 	}
@@ -51,14 +45,6 @@ public class Country {
 
 	public void setCode(String code) {
 		this.code = code;
-	}
-
-	public List<String> getCitiesKeysInCountry() {
-		return ImmutableList.copyOf(citiesKeysInCountry);
-	}
-
-	public void addToCitiesKeysInCountry(String cityKey) {
-		citiesKeysInCountry.add(cityKey);
 	}
 
 	@Override

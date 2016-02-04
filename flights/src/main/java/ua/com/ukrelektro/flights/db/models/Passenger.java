@@ -30,8 +30,9 @@ public class Passenger {
 
 	}
 
-	public Passenger(String givenName, String familyName, String documentNumber, String phone, String email) {
+	public Passenger(long id, String givenName, String familyName, String documentNumber, String phone, String email) {
 		super();
+		this.id = id;
 		this.givenName = givenName;
 		this.familyName = familyName;
 		this.documentNumber = documentNumber;

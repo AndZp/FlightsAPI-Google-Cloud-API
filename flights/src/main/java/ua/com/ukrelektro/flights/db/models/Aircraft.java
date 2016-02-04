@@ -1,5 +1,6 @@
 package ua.com.ukrelektro.flights.db.models;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -15,24 +16,19 @@ public class Aircraft {
 
 	private int places;
 
-	private int freePlaces;
+	private String company;
 
-	String company;
+	private String model;
 
 	private Aircraft() {
 	}
 
-	public Aircraft(String name, int places) {
-		this.name = name;
+	public Aircraft(long id, String company, String model, int places) {
+		this.id = id;
+		this.company = company;
+		this.model = model;
+		this.name = company + " " + model;
 		this.places = places;
-		freePlaces = places;
-	}
-
-	public void bookPlaces(int numberBookPlaces) {
-		if (numberBookPlaces > freePlaces) {
-			throw new IllegalArgumentException("Aircraft have only " + freePlaces + " free places");
-		}
-		freePlaces -= numberBookPlaces;
 	}
 
 	public long getId() {
@@ -47,12 +43,15 @@ public class Aircraft {
 		return places;
 	}
 
-	public int getFreePlaces() {
-		return freePlaces;
-	}
-
 	public String getCompany() {
 		return company;
 	}
 
+	public String getModel() {
+		return model;
+	}
+
+	public String getWebsafeKey() {
+		return Key.create(Aircraft.class, id).getString();
+	}
 }

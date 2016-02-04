@@ -13,14 +13,20 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 
 import ua.com.ukrelektro.flights.Constants;
+import ua.com.ukrelektro.flights.db.helpers.DbInit;
 import ua.com.ukrelektro.flights.db.models.City;
 import ua.com.ukrelektro.flights.db.models.Country;
+import ua.com.ukrelektro.flights.db.models.Flight;
 
 @Api(name = "flights", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID, Constants.API_EXPLORER_CLIENT_ID }, description = "API for the Flights Backend application.")
 public class FlightsApi {
 
 	@ApiMethod(name = "getAllCountries", path = "getAllCountries", httpMethod = HttpMethod.POST)
 	public List<Country> getAllCountries() {
+		// new CountryDBHelper().initDB();
+		// new CountryDBHelper().initAirCrafts();
+		// new CountryDBHelper().initFlights();
+		new DbInit().addFlights2toDB();
 		Query<Country> query = ofy().load().type(Country.class).orderKey(false);
 		return query.list();
 	}
@@ -46,6 +52,34 @@ public class FlightsApi {
 			throw new NotFoundException("No city found with key: " + websafeCityKey);
 		}
 		return city;
+	}
+
+	@ApiMethod(name = "getAllFlights", path = "getAllFlights", httpMethod = HttpMethod.POST)
+	public List<Flight> getAllFlights() {
+		return ofy().load().type(Flight.class).order("dateDepart").list();
+	}
+
+	@ApiMethod(name = "getFlightByKey", path = "getFlightByKey", httpMethod = HttpMethod.POST)
+	public Flight getFlightByKey(@Named(value = "websafeFlightKey") String websafeFlightKey) throws NotFoundException {
+		Key<Flight> keyFlight = Key.create(websafeFlightKey);
+		Flight flight = ofy().load().key(keyFlight).now();
+		if (flight == null) {
+			throw new NotFoundException("No flight found with key: " + websafeFlightKey);
+		}
+		return flight;
+	}
+
+	@ApiMethod(name = "getFlightsCityToCityByName", path = "getFlightsCityToCityByName", httpMethod = HttpMethod.POST)
+	public List<Flight> getFlightsCityToCityByName(@Named(value = "cityFrom") String cityFrom, @Named(value = "cityTo") String cityTo) throws NotFoundException {
+
+		City cityFromRef = ofy().load().type(City.class).filter("name =", cityFrom).list().get(0);
+		City cityToRef = ofy().load().type(City.class).filter("name =", cityTo).list().get(0);
+		if (cityFromRef == null || cityFromRef == null) {
+			throw new IllegalArgumentException("No found Cities with this name");
+		}
+
+		List<Flight> flights = ofy().load().type(Flight.class).filter("cityFromRef =", cityFromRef).filter("cityToRef =", cityToRef).list();
+		return flights;
 	}
 
 }

@@ -1,14 +1,12 @@
 package ua.com.ukrelektro.flights.db.models;
 
-import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
-
-import com.google.api.server.spi.config.AnnotationBoolean;
-import com.google.api.server.spi.config.ApiResourceProperty;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
 
 @Entity
@@ -16,28 +14,25 @@ import com.googlecode.objectify.annotation.Parent;
 public class City {
 
 	@Id
+	private long postCode;
+
+	@Index
 	private String name;
 
 	private String desc;
 
-	@Index
-	private String countryName;
-
 	@Parent
-	private Key<Country> countryKey;
+	@Load
+	@Index
+	private Ref<Country> country;
 
 	private City() {
 	}
 
-	public City(String name, String countryNameKey) {
+	public City(long postCode, String name, Country country) {
+		this.postCode = postCode;
 		this.name = name;
-		this.countryName = countryNameKey;
-		this.countryKey = Key.create(Country.class, countryNameKey);
-	}
-
-	@ApiResourceProperty(ignored = AnnotationBoolean.TRUE)
-	public Key<Country> getCountryKey() {
-		return countryKey;
+		this.country = Ref.create(country);
 	}
 
 	public String getName() {
@@ -52,18 +47,18 @@ public class City {
 		this.desc = desc;
 	}
 
-	public String getCountryName() {
-		return countryName;
+	public Country getCountry() {
+		return country.get();
 	}
 
 	// Get a String version of the key
 	public String getWebsafeKey() {
-		return Key.create(countryKey, City.class, name).getString();
+		return Key.create(country.getKey(), City.class, name).getString();
 	}
 
 	@Override
 	public String toString() {
-		return name + ofy().load().key(countryKey).now();
+		return name + country.get().name;
 	}
 
 }
