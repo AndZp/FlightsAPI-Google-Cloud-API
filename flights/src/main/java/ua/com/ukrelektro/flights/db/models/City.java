@@ -8,6 +8,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 
 @Entity
@@ -15,9 +16,12 @@ import com.googlecode.objectify.annotation.Parent;
 public class City {
 
 	@Id
-	String name;
+	private String name;
 
-	String desc;
+	private String desc;
+
+	@Index
+	private String countryName;
 
 	@Parent
 	private Key<Country> countryKey;
@@ -27,6 +31,7 @@ public class City {
 
 	public City(String name, String countryNameKey) {
 		this.name = name;
+		this.countryName = countryNameKey;
 		this.countryKey = Key.create(Country.class, countryNameKey);
 	}
 
@@ -39,16 +44,21 @@ public class City {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDesc() {
 		return desc;
 	}
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public String getCountryName() {
+		return countryName;
+	}
+
+	// Get a String version of the key
+	public String getWebsafeKey() {
+		return Key.create(countryKey, City.class, name).getString();
 	}
 
 	@Override

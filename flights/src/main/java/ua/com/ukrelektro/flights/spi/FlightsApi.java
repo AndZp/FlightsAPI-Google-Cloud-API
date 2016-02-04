@@ -8,6 +8,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.response.NotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 
@@ -20,7 +21,6 @@ public class FlightsApi {
 
 	@ApiMethod(name = "getAllCountries", path = "getAllCountries", httpMethod = HttpMethod.POST)
 	public List<Country> getAllCountries() {
-
 		Query<Country> query = ofy().load().type(Country.class).orderKey(false);
 		return query.list();
 	}
@@ -31,10 +31,21 @@ public class FlightsApi {
 		return query.list();
 	}
 
-	@ApiMethod(name = "getAllCitiesByCountry", path = "getAllCitiesByCountry", httpMethod = HttpMethod.POST)
-	public List<City> getAllCitiesByCountry(@Named(value = "country") String countryName) {
+	@ApiMethod(name = "getAllCitiesByCountryName", path = "getAllCitiesByCountryName", httpMethod = HttpMethod.POST)
+	public List<City> getAllCitiesByCountryName(@Named(value = "country") String countryName) {
 		Key<Country> keyCountry = Key.create(Country.class, countryName);
 		Query<City> query = ofy().load().type(City.class).ancestor(keyCountry).orderKey(false);
 		return query.list();
 	}
+
+	@ApiMethod(name = "getCityByKey", path = "getCityByKey", httpMethod = HttpMethod.POST)
+	public City getCityByKey(@Named(value = "websafeCityKey") String websafeCityKey) throws NotFoundException {
+		Key<City> keyCity = Key.create(websafeCityKey);
+		City city = ofy().load().key(keyCity).now();
+		if (city == null) {
+			throw new NotFoundException("No city found with key: " + websafeCityKey);
+		}
+		return city;
+	}
+
 }
