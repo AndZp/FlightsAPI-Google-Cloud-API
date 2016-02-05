@@ -30,4 +30,12 @@ public final class FlightDB extends AbstractBaseDB<Flight> {
 		return getQueryAll(Flight.class).filter("cityFromRef =", cityFrom).filter("cityToRef =", cityTo).order("dateDepart").list();
 	}
 
+	public Flight getFlightById(Long id) throws NotFoundException {
+		Flight flight = getById(Flight.class, id);
+		if (flight == null) {
+			throw new NotFoundException("Flight with id: " + id + " not registered");
+		}
+		return flight;
+	}
+
 }

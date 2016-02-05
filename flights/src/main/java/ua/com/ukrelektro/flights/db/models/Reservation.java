@@ -83,13 +83,29 @@ public class Reservation {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Reservation)) {
-			return false;
-		}
-		Reservation reserv = (Reservation) obj;
+	public String toString() {
+		Flight flightObj = flight.get();
+		Passenger passObj = passenger.get();
 
-		return this.id == reserv.id ? true : false;
+		StringBuilder stringBuilder = new StringBuilder("Reservation ID: " + id + "\n").append("Reservation Code: ").append(code).append("\n");
+
+		stringBuilder.append("Flight Code: ").append(flightObj.getCode()).append("\n");
+
+		stringBuilder.append("From: ").append(flightObj.getCityFrom().getName() + ", " + flightObj.getCityFrom().getCountry().getName()).append("\n");
+		stringBuilder.append("To: ").append(flightObj.getCityTo().getName() + ", " + flightObj.getCityTo().getCountry().getName()).append("\n");
+
+		stringBuilder.append("Date Depart: ").append(flightObj.getDateDepart()).append("\n");
+		stringBuilder.append("Date Arrival: ").append(flightObj.getDateCome()).append("\n");
+
+		if (addInfo != null) {
+			stringBuilder.append("Additional Information: ").append(addInfo).append("\n");
+		}
+
+		stringBuilder.append("Passenger: ").append(passObj.getGivenName() + " " + passObj.getGivenName()).append("\n");
+		stringBuilder.append("Passport number: ").append(passObj.getDocumentNumber()).append("\n");
+		stringBuilder.append("Tel: ").append(passObj.getPhone()).append("\n");
+
+		return stringBuilder.toString();
 	}
 
 }

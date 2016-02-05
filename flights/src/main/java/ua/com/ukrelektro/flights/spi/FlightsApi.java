@@ -77,10 +77,18 @@ public class FlightsApi {
 		return passengerDB.getPassenger(user);
 	}
 
-	@ApiMethod(name = "buyTicket", path = "buyTicket", httpMethod = HttpMethod.POST)
-	public Reservation buyTicket(final User user, @Named(value = "websafeFlightKey") String websafeFlightKey) throws UnauthorizedException, NotFoundException {
+	@ApiMethod(name = "buyTicketByWebsafeFlightKey", path = "buyTicketByWebsafeFlightKey", httpMethod = HttpMethod.POST)
+	public Reservation buyTicketByWebsafeFlightKey(final User user, @Named(value = "websafeFlightKey") String websafeFlightKey) throws UnauthorizedException, NotFoundException {
 		Passenger passenger = passengerDB.getPassenger(user);
 		Flight flight = flightDb.getFlightByWebsafeKey(websafeFlightKey);
+		return reservationDB.buyTicket(passenger, flight);
+
+	}
+
+	@ApiMethod(name = "buyTicketByFlightId", path = "buyTicketByFlightId", httpMethod = HttpMethod.POST)
+	public Reservation buyTicketByFlightId(final User user, @Named(value = "id") Long id) throws UnauthorizedException, NotFoundException {
+		Passenger passenger = passengerDB.getPassenger(user);
+		Flight flight = flightDb.getFlightById(id);
 		return reservationDB.buyTicket(passenger, flight);
 
 	}

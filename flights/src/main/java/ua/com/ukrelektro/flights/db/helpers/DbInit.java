@@ -19,7 +19,7 @@ public class DbInit {
 		return ofy().load().type(Country.class).order("key").list();
 	}
 
-	public void initDB() {
+	public void addCityAndCountry() {
 		Country isr = new Country("Israel", "ISR");
 		Country usa = new Country("USA", "USA");
 		Country rus = new Country("Russia", "RUS");
@@ -138,6 +138,8 @@ public class DbInit {
 		key = factory().allocateId(Flight.class);
 		b = new Flight(key.getId(), "KTE-235", new Date(1454407800000L), new Date(1454419200000L), from, to, air2);
 		ofy().save().entity(b);
+
+		addFlights2toDB();
 
 	}
 
