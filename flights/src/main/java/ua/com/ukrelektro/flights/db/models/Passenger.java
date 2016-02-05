@@ -1,9 +1,5 @@
 package ua.com.ukrelektro.flights.db.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -12,7 +8,7 @@ import com.googlecode.objectify.annotation.Id;
 @Cache
 public class Passenger {
 	@Id
-	private long id;
+	private String id;
 
 	private String givenName;
 
@@ -24,13 +20,11 @@ public class Passenger {
 
 	private String phone;
 
-	private List<Key<Flight>> flights = new ArrayList<Key<Flight>>();
-
 	private Passenger() {
 
 	}
 
-	public Passenger(long id, String givenName, String familyName, String documentNumber, String phone, String email) {
+	public Passenger(String id, String givenName, String familyName, String documentNumber, String phone, String email) {
 		super();
 		this.id = id;
 		this.givenName = givenName;
@@ -56,15 +50,7 @@ public class Passenger {
 		this.phone = phone;
 	}
 
-	public List<Key<Flight>> getFlights() {
-		return flights;
-	}
-
-	public void addFlightKey(Key<Flight> flightKey) {
-		flights.add(flightKey);
-	}
-
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 

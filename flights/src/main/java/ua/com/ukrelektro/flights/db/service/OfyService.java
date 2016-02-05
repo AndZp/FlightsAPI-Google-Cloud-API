@@ -8,6 +8,8 @@ import ua.com.ukrelektro.flights.db.models.Aircraft;
 import ua.com.ukrelektro.flights.db.models.City;
 import ua.com.ukrelektro.flights.db.models.Country;
 import ua.com.ukrelektro.flights.db.models.Flight;
+import ua.com.ukrelektro.flights.db.models.Passenger;
+import ua.com.ukrelektro.flights.db.models.Reservation;
 
 /**
  * Custom Objectify Service that this application should use.
@@ -21,6 +23,8 @@ public class OfyService {
 		factory().register(Country.class);
 		factory().register(Aircraft.class);
 		factory().register(Flight.class);
+		factory().register(Reservation.class);
+		factory().register(Passenger.class);
 
 	}
 

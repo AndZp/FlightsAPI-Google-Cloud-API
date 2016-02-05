@@ -8,8 +8,8 @@ import com.googlecode.objectify.cmd.Query;
 
 public abstract class AbstractBaseDB<T> {
 
-	protected <T> void create(T t) {
-		ofy().save().entity(t).now();
+	protected <T> Key<T> create(T t) {
+		return ofy().save().entity(t).now();
 	}
 
 	protected <T> String createWithKey(T t) {

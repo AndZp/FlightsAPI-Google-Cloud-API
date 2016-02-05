@@ -21,8 +21,8 @@ public final class FlightDB extends AbstractBaseDB<Flight> {
 	}
 
 	public List<Flight> getFlightsCityToCityByName(String cityNameFrom, String cityNameTo) {
-		City cityFrom = ofy().load().type(City.class).filter("name =", cityNameFrom).list().get(0);
-		City cityTo = ofy().load().type(City.class).filter("name =", cityNameTo).list().get(0);
+		City cityFrom = ofy().load().type(City.class).filter("name =", cityNameFrom).first().now();
+		City cityTo = ofy().load().type(City.class).filter("name =", cityNameTo).first().now();
 		if (cityFrom == null || cityFrom == null) {
 			throw new IllegalArgumentException("No found Cities with this name");
 		}

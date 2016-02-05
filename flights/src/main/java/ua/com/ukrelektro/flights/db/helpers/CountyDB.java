@@ -17,8 +17,16 @@ public final class CountyDB extends AbstractBaseDB<Country> {
 	}
 
 	public List<City> getCitiesByCountry(String countryName) throws NotFoundException {
-		Country country = checkSimpleKey(Country.class, countryName);
+		Country country = getCountryByName(countryName);
 		Query<City> query = ofy().load().type(City.class).ancestor(country).order("name");
 		return query.list();
+	}
+
+	public Country getCountryByName(String name) throws NotFoundException {
+		Country country = getByKey(Country.class, name);
+		if (country == null) {
+			throw new NotFoundException("This country not registered");
+		}
+		return country;
 	}
 }
