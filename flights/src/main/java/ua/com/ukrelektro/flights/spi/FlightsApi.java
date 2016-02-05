@@ -88,12 +88,7 @@ public class FlightsApi {
 	@ApiMethod(name = "getUserReservations", path = "getUserReservations", httpMethod = HttpMethod.POST)
 	public List<Reservation> getUserReservations(final User user) throws NotFoundException, UnauthorizedException {
 		Passenger passenger = passengerDB.getPassenger(user);
-		System.err.println("*****" + passenger.getFamilyName() + passenger.getEmail());
 		List<Reservation> list = reservationDB.getUserReservations(passenger);
-		System.err.println("-------" + list.size());
-		for (Reservation reserv : list) {
-			System.err.println("++++++" + reserv.getCode());
-		}
 		return list;
 	}
 

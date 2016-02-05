@@ -39,7 +39,7 @@ public final class ReservationDB extends AbstractBaseDB<Reservation> {
 	}
 
 	public List<Reservation> getUserReservations(Passenger passenger) {
-		Query<Reservation> query = ofy().load().type(Reservation.class).ancestor(passenger).order("reserveDate");
+		Query<Reservation> query = ofy().load().type(Reservation.class).ancestor(passenger);
 		return query.list();
 	}
 
