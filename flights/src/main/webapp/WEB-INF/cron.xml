@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/crons/set_reminders</url>
+    <description>Send reminders about reservation before 2 day to Flight Date</description>
+    <schedule>every day 8:00</schedule>
+  </cron>  
+</cronentries>

@@ -38,6 +38,7 @@
 		</user-data-constraint>
 	</security-constraint>
 	
+	 <!-- SendConfirmationEmailServlet - Push Queue  -->
 	<servlet>
        <servlet-name>SendConfirmationEmailServlet</servlet-name>
        <servlet-class>ua.com.ukrelektro.flights.servlets.SendConfirmationEmailServlet</servlet-class>
@@ -55,4 +56,24 @@
            <role-name>admin</role-name>
        </auth-constraint>
    </security-constraint>
+  
+   <!-- SendRemindersServlet - Cron jobs  -->
+   <servlet>
+        <servlet-name>SendRemindersServlet</servlet-name>
+        <servlet-class>ua.com.ukrelektro.flights.servlets.SendRemindersServlet</servlet-class>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>SendRemindersServlet</servlet-name>
+        <url-pattern>/crons/set_reminders</url-pattern>
+    </servlet-mapping>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>crons</web-resource-name>
+            <url-pattern>/crons/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
 </web-app>

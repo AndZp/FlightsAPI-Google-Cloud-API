@@ -1,5 +1,6 @@
 package ua.com.ukrelektro.flights.spi;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.api.server.spi.config.Api;
@@ -90,7 +91,6 @@ public class FlightsApi {
 		Passenger passenger = passengerDB.getPassenger(user);
 		Flight flight = flightDb.getFlightById(id);
 		return reservationDB.buyTicket(passenger, flight);
-
 	}
 
 	@ApiMethod(name = "getUserReservations", path = "getUserReservations", httpMethod = HttpMethod.POST)
@@ -100,4 +100,25 @@ public class FlightsApi {
 		return list;
 	}
 
+	/*
+	 * @ApiMethod(name = "getFlightsByDepartDate", path =
+	 * "getFlightsByDepartDate", httpMethod = HttpMethod.POST) public
+	 * List<Flight> getFlightsByDepartDate() throws NotFoundException { //
+	 * TestDate Date departDate = new Date(1454316000000L); return
+	 * flightDb.getFlightsByDepartDate(departDate); }
+	 */
+
+	/**
+	 * TEST METHOD. Testing query work by date depart;
+	 * 
+	 * @return
+	 * @throws NotFoundException
+	 */
+	@ApiMethod(name = "getReservationFromCurrentToNextDay", path = "getReservationFromCurrentToNextDay", httpMethod = HttpMethod.POST)
+	public List<Reservation> getReservationFromCurrentToNextDay() throws NotFoundException, UnauthorizedException {
+		Date currentDay = new Date(1454198400000L); // 31 01 2016 0:00:00
+
+		List<Reservation> list = reservationDB.getReservationOnNextDayFlight(currentDay);
+		return list;
+	}
 }

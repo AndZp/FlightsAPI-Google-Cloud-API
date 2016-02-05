@@ -2,9 +2,11 @@ package ua.com.ukrelektro.flights.db.helpers;
 
 import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.api.server.spi.response.NotFoundException;
+import com.googlecode.objectify.cmd.Query;
 
 import ua.com.ukrelektro.flights.db.models.City;
 import ua.com.ukrelektro.flights.db.models.Flight;
@@ -36,6 +38,11 @@ public final class FlightDB extends AbstractBaseDB<Flight> {
 			throw new NotFoundException("Flight with id: " + id + " not registered");
 		}
 		return flight;
+	}
+
+	public List<Flight> getFlightsByDepartDate(Date departDate) {
+		Query<Flight> query = ofy().load().type(Flight.class).filter("dateDepart =", departDate);
+		return query.list();
 	}
 
 }

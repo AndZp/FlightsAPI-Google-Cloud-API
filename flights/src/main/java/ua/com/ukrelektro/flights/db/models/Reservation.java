@@ -101,7 +101,7 @@ public class Reservation {
 			stringBuilder.append("Additional Information: ").append(addInfo).append("\n");
 		}
 
-		stringBuilder.append("Passenger: ").append(passObj.getGivenName() + " " + passObj.getGivenName()).append("\n");
+		stringBuilder.append("Passenger: ").append(passObj.getGivenName() + " " + passObj.getFamilyName()).append("\n");
 		stringBuilder.append("Passport number: ").append(passObj.getDocumentNumber()).append("\n");
 		stringBuilder.append("Tel: ").append(passObj.getPhone()).append("\n");
 

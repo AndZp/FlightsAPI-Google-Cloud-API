@@ -5,6 +5,8 @@ import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.google.appengine.api.taskqueue.Queue;
@@ -47,6 +49,25 @@ public final class ReservationDB extends AbstractBaseDB<Reservation> {
 
 	public List<Reservation> getUserReservations(Passenger passenger) {
 		Query<Reservation> query = ofy().load().type(Reservation.class).ancestor(passenger);
+		return query.list();
+	}
+
+	public List<Reservation> getReservationOnNextDayFlight(Date currentDay) {
+		// Date dateTest = new Date(1454316000000L);
+		Date startDate = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(startDate);
+		c.add(Calendar.DATE, 1);
+		Date endDate = c.getTime();
+
+		Iterable<Key<Flight>> queryFligths = ofy().load().type(Flight.class).filter("dateDepart >", startDate).filter("dateDepart <", endDate).keys();
+		Query<Reservation> query = ofy().load().type(Reservation.class).filter("flight in", queryFligths);
+
+		//
+		// Query<Reservation> query =
+		// ofy().load().type(Reservation.class).filter("flight.dateDepart >",
+		// startDate).filter("flight.dateDepart <", endDate);
+
 		return query.list();
 	}
 
