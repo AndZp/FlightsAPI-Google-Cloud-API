@@ -2,7 +2,7 @@
 <cronentries>
   <cron>
     <url>/crons/set_reminders</url>
-    <description>Send reminders about reservation before 2 day to Flight Date</description>
+    <description>Send reminders about reservation before 1 day to Flight Date</description>
     <schedule>every day 8:00</schedule>
   </cron>  
 </cronentries>

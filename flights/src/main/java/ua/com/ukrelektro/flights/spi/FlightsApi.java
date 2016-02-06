@@ -32,37 +32,37 @@ public class FlightsApi {
 	private PassengerDB passengerDB = new PassengerDB();
 	private ReservationDB reservationDB = new ReservationDB();
 
-	@ApiMethod(name = "getAllCountries", path = "getAllCountries", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getAllCountries", path = "getAllCountries", httpMethod = HttpMethod.GET)
 	public List<Country> getAllCountries() {
 		return countryDB.getAllCountry();
 	}
 
-	@ApiMethod(name = "getAllCities", path = "getAllCities", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getAllCities", path = "getAllCities", httpMethod = HttpMethod.GET)
 	public List<City> getAllCities() {
 		return cityDB.getAllCities();
 	}
 
-	@ApiMethod(name = "getAllCitiesByCountryName", path = "getAllCitiesByCountryName", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getAllCitiesByCountryName", path = "getAllCitiesByCountryName", httpMethod = HttpMethod.GET)
 	public List<City> getAllCitiesByCountryName(@Named(value = "country") String countryName) throws NotFoundException {
 		return countryDB.getCitiesByCountry(countryName);
 	}
 
-	@ApiMethod(name = "getCityByWebsafeKey", path = "getCityByWebsafeKey", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getCityByWebsafeKey", path = "getCityByWebsafeKey", httpMethod = HttpMethod.GET)
 	public City getCityByWebsafeKey(@Named(value = "websafeCityKey") String websafeCityKey) throws NotFoundException {
 		return cityDB.getCityByWebsafeKey(websafeCityKey);
 	}
 
-	@ApiMethod(name = "getAllFlights", path = "getAllFlights", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getAllFlights", path = "getAllFlights", httpMethod = HttpMethod.GET)
 	public List<Flight> getAllFlights() {
 		return flightDb.getAllFlight();
 	}
 
-	@ApiMethod(name = "getFlightByKey", path = "getFlightByKey", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getFlightByKey", path = "getFlightByKey", httpMethod = HttpMethod.GET)
 	public Flight getFlightByKey(@Named(value = "websafeFlightKey") String websafeFlightKey) throws NotFoundException {
 		return flightDb.getFlightByWebsafeKey(websafeFlightKey);
 	}
 
-	@ApiMethod(name = "getFlightsCityToCityByName", path = "getFlightsCityToCityByName", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getFlightsCityToCityByName", path = "getFlightsCityToCityByName", httpMethod = HttpMethod.GET)
 	public List<Flight> getFlightsCityToCityByName(@Named(value = "cityFrom") String cityFrom, @Named(value = "cityTo") String cityTo) throws NotFoundException {
 		return flightDb.getFlightsCityToCityByName(cityFrom, cityTo);
 	}

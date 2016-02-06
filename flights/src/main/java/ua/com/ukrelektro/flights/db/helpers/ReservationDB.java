@@ -25,6 +25,10 @@ public final class ReservationDB extends AbstractBaseDB<Reservation> {
 	public Reservation buyTicket(final Passenger passenger, final Flight flight) {
 		final Queue queue = QueueFactory.getDefaultQueue();
 
+		if (flight.isExistFreePlaces()) {
+			throw new IllegalArgumentException("All places on this flight are reserved");
+		}
+
 		Reservation reservation = ofy().transact(new Work<Reservation>() {
 
 			@Override
@@ -34,9 +38,11 @@ public final class ReservationDB extends AbstractBaseDB<Reservation> {
 				SecureRandom random = new SecureRandom();
 				String code = new BigInteger(30, random).toString(32);
 
+				flight.bookPlaces(1);
+
 				Reservation reservation = new Reservation(reservationKey.getId(), code, flight, passenger);
 
-				ofy().save().entities(passenger, reservation);
+				ofy().save().entities(passenger, reservation, flight);
 
 				queue.add(ofy().getTransaction(), TaskOptions.Builder.withUrl("/tasks/send_confirmation_email").param("email", passenger.getEmail()).param("reservationInfo", reservation.toString()));
 
