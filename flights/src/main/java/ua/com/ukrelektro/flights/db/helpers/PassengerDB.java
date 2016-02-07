@@ -1,5 +1,7 @@
 package ua.com.ukrelektro.flights.db.helpers;
 
+import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
+
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.users.User;
@@ -29,6 +31,14 @@ public final class PassengerDB extends AbstractBaseDB<Passenger> {
 		if (passenger == null) {
 			throw new NotFoundException("This user not registered");
 		}
+		return passenger;
+
+	}
+
+	public Passenger updatePassengerDetails(User user, String givenName, String familyName, String documentNumber, String phone, String email) throws UnauthorizedException, NotFoundException {
+		Passenger passenger = getPassenger(user);
+		passenger.update(givenName, familyName, documentNumber, phone, email);
+		ofy().save().entity(passenger);
 		return passenger;
 	}
 

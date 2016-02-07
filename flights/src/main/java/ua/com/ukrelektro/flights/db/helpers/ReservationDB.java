@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.google.api.server.spi.response.ForbiddenException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -19,6 +20,7 @@ import com.googlecode.objectify.cmd.Query;
 import ua.com.ukrelektro.flights.db.models.Flight;
 import ua.com.ukrelektro.flights.db.models.Passenger;
 import ua.com.ukrelektro.flights.db.models.Reservation;
+import ua.com.ukrelektro.flights.spi.wrappers.WrappedBoolean;
 
 public final class ReservationDB extends AbstractBaseDB<Reservation> {
 
@@ -69,12 +71,72 @@ public final class ReservationDB extends AbstractBaseDB<Reservation> {
 		Iterable<Key<Flight>> queryFligths = ofy().load().type(Flight.class).filter("dateDepart >", startDate).filter("dateDepart <", endDate).keys();
 		Query<Reservation> query = ofy().load().type(Reservation.class).filter("flight in", queryFligths);
 
-		//
-		// Query<Reservation> query =
-		// ofy().load().type(Reservation.class).filter("flight.dateDepart >",
-		// startDate).filter("flight.dateDepart <", endDate);
-
 		return query.list();
 	}
+
+	public WrappedBoolean deleteUserReservationById(final Passenger passenger, final Long reservationId) throws ForbiddenException {
+		WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
+
+			@Override
+			public WrappedBoolean run() {
+				Key<Passenger> passKey = Key.create(passenger);
+				Key<Reservation> reservationKey = Key.create(passKey, Reservation.class, reservationId);
+				Reservation reservation = ofy().load().key(reservationKey).now();
+				if (reservation == null) {
+					return new WrappedBoolean(false, "You are not have reservation with ID " + reservationId);
+				}
+				Flight flight = reservation.getFlight();
+				flight.giveBackPlaces(1);
+				ofy().delete().entity(reservation).now();
+				ofy().save().entities(passenger, flight).now();
+				return new WrappedBoolean(true);
+			}
+		});
+		if (!result.getResult()) {
+			throw new ForbiddenException(result.getReason());
+		}
+
+		return result;
+	}
+
+	// if (user == null) {
+	// throw new UnauthorizedException("Authorization required");
+	// }
+	//
+	// WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
+	// @Override
+	// public WrappedBoolean run() {
+	// Key<Conference> conferenceKey = Key.create(websafeConferenceKey);
+	// Conference conference = ofy().load().key(conferenceKey).now();
+	// // 404 when there is no Conference with the given conferenceId.
+	// if (conference == null) {
+	// return new WrappedBoolean(false, "No Conference found with key: " +
+	// websafeConferenceKey);
+	// }
+	//
+	// // Un-registering from the Conference.
+	// Profile profile = getProfileFromUser(user);
+	// if (profile.getConferenceKeysToAttend().contains(websafeConferenceKey)) {
+	// profile.unregisterFromConference(websafeConferenceKey);
+	// conference.giveBackSeats(1);
+	// ofy().save().entities(profile, conference).now();
+	// return new WrappedBoolean(true);
+	// } else {
+	// return new WrappedBoolean(false, "You are not registered for this
+	// conference");
+	// }
+	// }
+	// });
+	// // if result is false
+	// if (!result.getResult()) {
+	// if (result.getReason().contains("No Conference found with key")) {
+	// throw new NotFoundException(result.getReason());
+	// } else {
+	// throw new ForbiddenException(result.getReason());
+	// }
+	// }
+	// // NotFoundException is actually thrown here.
+	// return new WrappedBoolean(result.getResult());
+	// }
 
 }

@@ -7,6 +7,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.response.ForbiddenException;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.users.User;
@@ -22,6 +23,8 @@ import ua.com.ukrelektro.flights.db.models.Country;
 import ua.com.ukrelektro.flights.db.models.Flight;
 import ua.com.ukrelektro.flights.db.models.Passenger;
 import ua.com.ukrelektro.flights.db.models.Reservation;
+import ua.com.ukrelektro.flights.params.FlightParam;
+import ua.com.ukrelektro.flights.spi.wrappers.WrappedBoolean;
 
 @Api(name = "flights", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID, Constants.API_EXPLORER_CLIENT_ID }, description = "API for the Flights Backend application.")
 public class FlightsApi {
@@ -67,10 +70,21 @@ public class FlightsApi {
 		return flightDb.getFlightsCityToCityByName(cityFrom, cityTo);
 	}
 
-	@ApiMethod(name = "registerNewPassenger", path = "registerNewPassenger", httpMethod = HttpMethod.POST)
+	@ApiMethod(name = "getFlightsByFlightParam", path = "getFlightsByFlightParam", httpMethod = HttpMethod.POST)
+	public List<Flight> getFlightsByFlightParam(FlightParam flightParam) throws NotFoundException {
+		return flightDb.getFlightsByFlightParam(flightParam);
+	}
+
+	@ApiMethod(name = "registerNewPassenger", path = "registerNewPassenger", httpMethod = HttpMethod.PUT)
 	public Passenger registerNewPassenger(final User user, @Named(value = "givenName") String givenName, @Named(value = "familyName") String familyName, @Named(value = "documentNumber") String documentNumber, @Named(value = "phone") String phone)
 			throws UnauthorizedException {
 		return passengerDB.createNewPassenger(user, givenName, familyName, documentNumber, phone);
+	}
+
+	@ApiMethod(name = "updatePassengerDetails", path = "updatePassengerDetails", httpMethod = HttpMethod.PUT)
+	public Passenger updatePassengerDetails(final User user, @Named(value = "givenName") String givenName, @Named(value = "familyName") String familyName, @Named(value = "documentNumber") String documentNumber, @Named(value = "phone") String phone,
+			@Named(value = "email") String email) throws UnauthorizedException, NotFoundException {
+		return passengerDB.updatePassengerDetails(user, givenName, familyName, documentNumber, phone, email);
 	}
 
 	@ApiMethod(name = "getPassenger", path = "getPassenger", httpMethod = HttpMethod.POST)
@@ -100,6 +114,12 @@ public class FlightsApi {
 		return list;
 	}
 
+	@ApiMethod(name = "deleteUserReservationById", path = "deleteUserReservationById", httpMethod = HttpMethod.DELETE)
+	public WrappedBoolean deleteUserReservationById(final User user, @Named(value = "reservationId") Long reservationId) throws NotFoundException, UnauthorizedException, ForbiddenException {
+		Passenger passenger = passengerDB.getPassenger(user);
+		return reservationDB.deleteUserReservationById(passenger, reservationId);
+	}
+
 	/*
 	 * @ApiMethod(name = "getFlightsByDepartDate", path =
 	 * "getFlightsByDepartDate", httpMethod = HttpMethod.POST) public
@@ -121,4 +141,5 @@ public class FlightsApi {
 		List<Reservation> list = reservationDB.getReservationOnNextDayFlight(currentDay);
 		return list;
 	}
+
 }

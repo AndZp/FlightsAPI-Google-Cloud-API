@@ -9,7 +9,9 @@ import com.google.api.server.spi.response.NotFoundException;
 import com.googlecode.objectify.cmd.Query;
 
 import ua.com.ukrelektro.flights.db.models.City;
+import ua.com.ukrelektro.flights.db.models.Country;
 import ua.com.ukrelektro.flights.db.models.Flight;
+import ua.com.ukrelektro.flights.params.FlightParam;
 
 public final class FlightDB extends AbstractBaseDB<Flight> {
 
@@ -43,6 +45,25 @@ public final class FlightDB extends AbstractBaseDB<Flight> {
 	public List<Flight> getFlightsByDepartDate(Date departDate) {
 		Query<Flight> query = ofy().load().type(Flight.class).filter("dateDepart =", departDate);
 		return query.list();
+	}
+
+	public List<Flight> getFlightsByFlightParam(FlightParam flightParam) {
+
+		Query<Flight> queryAllFlights = getQueryAll(Flight.class);
+
+		if (flightParam == null) {
+			return queryAllFlights.order("dateDepart").list();
+		}
+		String str = flightParam.getFromCountryName();
+
+		if (flightParam.getFromCityId() != null) {
+			queryAllFlights.filter("cityFromRef", getById(City.class, flightParam.getFromCityId()));
+		} else if (str != null && !str.isEmpty()) {
+			Country fromCountry = getByKey(Country.class, str);
+			queryAllFlights.filter("cityFromRef", fromCountry);
+		}
+
+		return queryAllFlights.order("dateDepart").list();
 	}
 
 }

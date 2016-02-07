@@ -118,6 +118,13 @@ public class Flight {
 		return true;
 	}
 
+	public void giveBackPlaces(int placeNumber) {
+		freePlaces += placeNumber;
+		if (existFreePlaces == false) {
+			existFreePlaces = true;
+		}
+	}
+
 	public String getWebsafeKey() {
 		return Key.create(Flight.class, id).getString();
 	}

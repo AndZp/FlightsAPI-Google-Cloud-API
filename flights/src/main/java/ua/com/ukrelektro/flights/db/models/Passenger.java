@@ -66,4 +66,13 @@ public class Passenger {
 		return documentNumber;
 	}
 
+	public void update(String givenNameNew, String familyNameNew, String documentNumberNew, String phoneNew, String emailNew) {
+		this.givenName = familyNameNew;
+		this.familyName = familyNameNew;
+		this.documentNumber = documentNumberNew;
+		this.phone = phoneNew;
+		this.email = emailNew;
+
+	}
+
 }
