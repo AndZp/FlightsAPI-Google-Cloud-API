@@ -21,7 +21,8 @@ public final class PassengerDB extends AbstractBaseDB<Passenger> {
 		return instance;
 	}
 
-	public Passenger createNewPassenger(final User user, String givenName, String familyName, String documentNumber, String phone) throws UnauthorizedException {
+	public Passenger createNewPassenger(final User user, String givenName, String familyName, String documentNumber, String phone)
+			throws UnauthorizedException {
 
 		if (user == null) {
 			throw new UnauthorizedException("Authorization required");
@@ -46,9 +47,17 @@ public final class PassengerDB extends AbstractBaseDB<Passenger> {
 
 	}
 
-	public Passenger updatePassengerDetails(User user, String givenName, String familyName, String documentNumber, String phone, String email) throws UnauthorizedException, NotFoundException {
+	public Passenger updatePassengerDetails(User user, String givenName, String familyName, String documentNumber, String phone, String email)
+			throws UnauthorizedException, NotFoundException {
 		Passenger passenger = getPassenger(user);
 		passenger.update(givenName, familyName, documentNumber, phone, email);
+		ofy().save().entity(passenger);
+		return passenger;
+	}
+
+	public Passenger updatePassengerAvatar(User user, String avatarBlobKey) throws UnauthorizedException, NotFoundException {
+		Passenger passenger = getPassenger(user);
+		passenger.setAvatarBlobKey(avatarBlobKey);
 		ofy().save().entity(passenger);
 		return passenger;
 	}

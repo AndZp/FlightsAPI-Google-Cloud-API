@@ -20,6 +20,8 @@ public class Passenger {
 
 	private String phone;
 
+	private String avatarBlobKey;
+
 	private Passenger() {
 
 	}
@@ -73,6 +75,14 @@ public class Passenger {
 		this.phone = phoneNew;
 		this.email = emailNew;
 
+	}
+
+	public String getAvatarBlobKey() {
+		return avatarBlobKey;
+	}
+
+	public void setAvatarBlobKey(String avatarBlobKey) {
+		this.avatarBlobKey = avatarBlobKey;
 	}
 
 }
