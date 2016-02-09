@@ -2,15 +2,15 @@ package ua.com.ukrelektro.flights.params;
 
 import java.util.Date;
 
-public class FlightParam {
+public class SearchParam {
 	private String fromCountryName;
-	private Long fromCityId;
+	private String fromCityName;
 	private String toCountryName;
-	private Long toCityId;
+	private String toCityName;
 	private Date fromDate;
 	private Date toDate;
 
-	public FlightParam() {
+	public SearchParam() {
 
 	}
 
@@ -22,12 +22,12 @@ public class FlightParam {
 		this.fromCountryName = fromCountryName;
 	}
 
-	public Long getFromCityId() {
-		return fromCityId;
+	public String getFromCityName() {
+		return fromCityName;
 	}
 
-	public void setFromCityId(Long fromCityId) {
-		this.fromCityId = fromCityId;
+	public void setFromCityName(String fromCityName) {
+		this.fromCityName = fromCityName;
 	}
 
 	public String getToCountryName() {
@@ -38,12 +38,12 @@ public class FlightParam {
 		this.toCountryName = toCountryName;
 	}
 
-	public Long getToCityId() {
-		return toCityId;
+	public String getToCityName() {
+		return toCityName;
 	}
 
-	public void setToCityId(Long toCityId) {
-		this.toCityId = toCityId;
+	public void setToCityName(String toCityName) {
+		this.toCityName = toCityName;
 	}
 
 	public Date getFromDate() {

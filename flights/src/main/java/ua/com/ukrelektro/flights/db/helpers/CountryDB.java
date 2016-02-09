@@ -10,8 +10,19 @@ import com.googlecode.objectify.cmd.Query;
 import ua.com.ukrelektro.flights.db.models.City;
 import ua.com.ukrelektro.flights.db.models.Country;
 
-public final class CountyDB extends AbstractBaseDB<Country> {
+public final class CountryDB extends AbstractBaseDB<Country> {
+	private CountryDB() {
+	}
 
+	private static CountryDB instance;
+
+	public static CountryDB getInstance() {
+		if (instance == null) {
+			instance = new CountryDB();
+		}
+		return instance;
+	}
+	
 	public List<Country> getAllCountry() {
 		return getQueryAll(Country.class).orderKey(false).list();
 	}

@@ -23,11 +23,22 @@ import ua.com.ukrelektro.flights.db.models.Reservation;
 import ua.com.ukrelektro.flights.spi.wrappers.WrappedBoolean;
 
 public final class ReservationDB extends AbstractBaseDB<Reservation> {
+	private ReservationDB() {
+	}
+
+	private static ReservationDB instance;
+
+	public static ReservationDB getInstance() {
+		if (instance == null) {
+			instance = new ReservationDB();
+		}
+		return instance;
+	}
 
 	public Reservation buyTicket(final Passenger passenger, final Flight flight) {
 		final Queue queue = QueueFactory.getDefaultQueue();
 
-		if (flight.isExistFreePlaces()) {
+		if (!flight.isExistFreePlaces()) {
 			throw new IllegalArgumentException("All places on this flight are reserved");
 		}
 

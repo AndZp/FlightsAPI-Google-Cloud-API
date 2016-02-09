@@ -9,6 +9,17 @@ import com.google.appengine.api.users.User;
 import ua.com.ukrelektro.flights.db.models.Passenger;
 
 public final class PassengerDB extends AbstractBaseDB<Passenger> {
+	private PassengerDB() {
+	}
+
+	private static PassengerDB instance;
+
+	public static PassengerDB getInstance() {
+		if (instance == null) {
+			instance = new PassengerDB();
+		}
+		return instance;
+	}
 
 	public Passenger createNewPassenger(final User user, String givenName, String familyName, String documentNumber, String phone) throws UnauthorizedException {
 
