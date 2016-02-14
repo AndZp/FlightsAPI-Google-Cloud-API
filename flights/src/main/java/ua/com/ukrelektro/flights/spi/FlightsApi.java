@@ -22,6 +22,11 @@ import ua.com.ukrelektro.flights.db.helpers.CountryDB;
 import ua.com.ukrelektro.flights.db.helpers.FlightDB;
 import ua.com.ukrelektro.flights.db.helpers.PassengerDB;
 import ua.com.ukrelektro.flights.db.helpers.ReservationDB;
+import ua.com.ukrelektro.flights.db.helpers.impl.CityDBImpl;
+import ua.com.ukrelektro.flights.db.helpers.impl.CountryDBImpl;
+import ua.com.ukrelektro.flights.db.helpers.impl.FlightDBImpl;
+import ua.com.ukrelektro.flights.db.helpers.impl.PassengerDBImpl;
+import ua.com.ukrelektro.flights.db.helpers.impl.ReservationDBImpl;
 import ua.com.ukrelektro.flights.db.models.City;
 import ua.com.ukrelektro.flights.db.models.Country;
 import ua.com.ukrelektro.flights.db.models.Flight;
@@ -31,15 +36,15 @@ import ua.com.ukrelektro.flights.params.SearchParam;
 import ua.com.ukrelektro.flights.spi.wrappers.StringWrapper;
 import ua.com.ukrelektro.flights.spi.wrappers.WrappedBoolean;
 
-@Api(name = "flights", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID,
-		Constants.API_EXPLORER_CLIENT_ID }, description = "API for the Flights Backend application.")
+@Api(name = "flights", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID, Constants.API_EXPLORER_CLIENT_ID,
+		Constants.ANDROID_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE }, description = "API for the Flights Backend application.")
 public class FlightsApi {
 
-	private CityDB cityDB = CityDB.getInstance();
-	private CountryDB countryDB = CountryDB.getInstance();
-	private FlightDB flightDb = FlightDB.getInstance();
-	private PassengerDB passengerDB = PassengerDB.getInstance();
-	private ReservationDB reservationDB = ReservationDB.getInstance();
+	private CityDB cityDB = CityDBImpl.getInstance();
+	private CountryDB countryDB = CountryDBImpl.getInstance();
+	private FlightDB flightDb = FlightDBImpl.getInstance();
+	private PassengerDB passengerDB = PassengerDBImpl.getInstance();
+	private ReservationDB reservationDB = ReservationDBImpl.getInstance();
 
 	@ApiMethod(name = "getAllCountries", path = "places/getAllCountries", httpMethod = HttpMethod.GET)
 	public List<Country> getAllCountries() {
@@ -74,12 +79,6 @@ public class FlightsApi {
 	@ApiMethod(name = "getFlightWebsafeByKey", path = "flights/getFlightWebsafeByKey", httpMethod = HttpMethod.GET)
 	public Flight getFlightByWebsafeByKey(@Named(value = "websafeFlightKey") String websafeFlightKey) throws NotFoundException {
 		return flightDb.getFlightByWebsafeKey(websafeFlightKey);
-	}
-
-	@ApiMethod(name = "getFlightsCityToCityByName", path = "flights/getFlightsCityToCityByName", httpMethod = HttpMethod.GET)
-	public List<Flight> getFlightsCityToCityByName(@Named(value = "cityFrom") String cityFrom, @Named(value = "cityTo") String cityTo)
-			throws NotFoundException {
-		return flightDb.getFlightsCityToCityByName(cityFrom, cityTo);
 	}
 
 	@ApiMethod(name = "getFlightsByFlightParam", path = "flights/getFlightsByFlightParam", httpMethod = HttpMethod.POST)

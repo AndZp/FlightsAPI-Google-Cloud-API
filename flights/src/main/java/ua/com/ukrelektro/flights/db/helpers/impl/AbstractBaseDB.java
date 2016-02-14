@@ -1,4 +1,4 @@
-package ua.com.ukrelektro.flights.db.helpers;
+package ua.com.ukrelektro.flights.db.helpers.impl;
 
 import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
 

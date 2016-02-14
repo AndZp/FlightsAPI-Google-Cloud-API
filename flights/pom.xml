@@ -12,8 +12,8 @@
 	<properties>
 		<app.id>and-flights-api</app.id>
 		<app.version>1</app.version>
-		<appengine.version>1.9.25</appengine.version>
-		<gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
+		<appengine.version>1.9.32</appengine.version>
+		<gcloud.plugin.version>2.0.9.95.v20160203</gcloud.plugin.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
@@ -77,7 +77,7 @@
 			<version>${appengine.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- DataStore frameworks -->
 		<dependency>
 			<groupId>com.googlecode.objectify</groupId>
@@ -146,8 +146,9 @@
 					<!-- address>0.0.0.0</address> <port>8080</port -->
 					<!-- Comment in the below snippet to enable local debugging with a remote 
 						debugger like those included with Eclipse or IntelliJ -->
-					<!-- jvmFlags> <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag> 
-						</jvmFlags -->
+					<jvmFlags>
+						<jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>
+					</jvmFlags>
 				</configuration>
 				<executions>
 					<execution>
