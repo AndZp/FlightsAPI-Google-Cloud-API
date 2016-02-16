@@ -22,8 +22,13 @@ public final class PassengerDBImpl extends AbstractBaseDB<Passenger> implements 
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#createNewPassenger(com.google.appengine.api.users.User, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#createNewPassenger(
+	 * com.google.appengine.api.users.User, java.lang.String, java.lang.String,
+	 * java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Passenger createNewPassenger(final User user, String givenName, String familyName, String documentNumber, String phone)
@@ -40,8 +45,12 @@ public final class PassengerDBImpl extends AbstractBaseDB<Passenger> implements 
 		return passenger;
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#getPassenger(com.google.appengine.api.users.User)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#getPassenger(com.
+	 * google.appengine.api.users.User)
 	 */
 	@Override
 	public Passenger getPassenger(User user) throws UnauthorizedException, NotFoundException {
@@ -56,8 +65,13 @@ public final class PassengerDBImpl extends AbstractBaseDB<Passenger> implements 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#updatePassengerDetails(com.google.appengine.api.users.User, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#
+	 * updatePassengerDetails(com.google.appengine.api.users.User,
+	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+	 * java.lang.String)
 	 */
 	@Override
 	public Passenger updatePassengerDetails(User user, String givenName, String familyName, String documentNumber, String phone, String email)
@@ -68,8 +82,12 @@ public final class PassengerDBImpl extends AbstractBaseDB<Passenger> implements 
 		return passenger;
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#updatePassengerAvatar(com.google.appengine.api.users.User, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ua.com.ukrelektro.flights.db.helpers.impl.PassengerDB#
+	 * updatePassengerAvatar(com.google.appengine.api.users.User,
+	 * java.lang.String)
 	 */
 	@Override
 	public Passenger updatePassengerAvatar(User user, String avatarBlobKey) throws UnauthorizedException, NotFoundException {

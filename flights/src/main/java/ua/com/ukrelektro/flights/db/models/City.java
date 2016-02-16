@@ -58,7 +58,7 @@ public class City {
 
 	@Override
 	public String toString() {
-		return name + country.get().name;
+		return name + ", " + country.get().toString();
 	}
 
 }

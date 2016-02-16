@@ -41,10 +41,12 @@ public class SendRemindersServlet extends HttpServlet {
 		Date endDate = c.getTime();
 
 		Iterable<Key<Flight>> queryFligths = ofy().load().type(Flight.class).filter("dateDepart >", startDate).filter("dateDepart <", endDate).keys();
-		Query<Reservation> queryReservation = ofy().load().type(Reservation.class).filter("flight in", queryFligths);
+		if (queryFligths.iterator().hasNext()) {
+			Query<Reservation> queryReservation = ofy().load().type(Reservation.class).filter("flight in", queryFligths);
+			for (Reservation reservation : queryReservation) {
+				sendRemindMail(reservation);
+			}
 
-		for (Reservation reservation : queryReservation) {
-			sendRemindMail(reservation);
 		}
 
 		response.setStatus(204);
@@ -55,10 +57,12 @@ public class SendRemindersServlet extends HttpServlet {
 		String reservationInfo = reservation.toString();
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
-		String body = "Hi " + reservation.getPassenger().getGivenName() + ",\nWe want to remind you that you have a reservation on the flight:\n" + reservationInfo + "\nEnjoy your flight !";
+		String body = "Hi " + reservation.getPassenger().getGivenName() + ",\nWe want to remind you that you have a reservation on the flight:\n"
+				+ reservationInfo + "\nEnjoy your flight !";
 		try {
 			Message message = new MimeMessage(session);
-			InternetAddress from = new InternetAddress(String.format("noreply@%s.appspotmail.com", SystemProperty.applicationId.get()), "Flights GCE API");
+			InternetAddress from = new InternetAddress(String.format("noreply@%s.appspotmail.com", SystemProperty.applicationId.get()),
+					"Flights GCE API");
 			message.setFrom(from);
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email, ""));
 			message.setSubject("Do you remember about your Reservation?");

@@ -9,11 +9,11 @@ import com.googlecode.objectify.annotation.Id;
 public class Country {
 
 	@Id
-	String name;
+	private String name;
 
-	String desc;
+	private String desc;
 
-	String code;
+	private String code;
 
 	private Country() {
 	}

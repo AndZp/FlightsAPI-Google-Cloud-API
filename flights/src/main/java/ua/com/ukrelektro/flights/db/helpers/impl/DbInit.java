@@ -160,21 +160,21 @@ public class DbInit {
 	}
 
 	public void addNewFlightsForCRONTest() {
-		City from = ofy().load().type(City.class).filter("name =", "Kiev").list().get(0);
-		City to = ofy().load().type(City.class).filter("name =", "Tel-Aviv").list().get(0);
+		City from = ofy().load().type(City.class).filter("name =", "Tel-Aviv").list().get(0);
+		City to = ofy().load().type(City.class).filter("name =", "Eilat").list().get(0);
 		Aircraft air2 = ofy().load().type(Aircraft.class).list().get(5);
 		Key<Flight> key = factory().allocateId(Flight.class);
 
-		// 6 февраля 2016 г. 18:00:00
-		Flight b = new Flight(key.getId(), "CRON-06/02", new Date(1454781600000L), new Date(1454793000000L), from, to, air2);
+		// 15 февраля 2016 г.
+		Flight b = new Flight(key.getId(), "CRON-15/02", new Date(1455525060000L), new Date(1455535860000L), from, to, air2);
 		ofy().save().entity(b);
 
-		from = ofy().load().type(City.class).filter("name =", "Kiev").list().get(0);
 		to = ofy().load().type(City.class).filter("name =", "Tel-Aviv").list().get(0);
+		from = ofy().load().type(City.class).filter("name =", "Eilat").list().get(0);
 		air2 = ofy().load().type(Aircraft.class).list().get(5);
 		key = factory().allocateId(Flight.class);
-		// 7 февраля 2016 г. 20:10:00 UTC
-		b = new Flight(key.getId(), "CRON-07/02", new Date(1454875800000L), new Date(1454885700000L), from, to, air2);
+		// 16 февраля 2016 г. 20:10:00 UTC
+		b = new Flight(key.getId(), "CRON-16/02", new Date(1455622260000L), new Date(1455630900000L), from, to, air2);
 		ofy().save().entity(b);
 
 	}
