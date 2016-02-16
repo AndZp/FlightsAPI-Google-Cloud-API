@@ -5,8 +5,6 @@ import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import com.google.api.server.spi.response.ForbiddenException;
@@ -36,9 +34,6 @@ public final class ReservationDBImpl extends AbstractBaseDB<Reservation> impleme
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.ReservationDB#buyTicket(ua.com.ukrelektro.flights.db.models.Passenger, ua.com.ukrelektro.flights.db.models.Flight)
-	 */
 	@Override
 	public Reservation buyTicket(final Passenger passenger, final Flight flight) {
 		final Queue queue = QueueFactory.getDefaultQueue();
@@ -62,7 +57,8 @@ public final class ReservationDBImpl extends AbstractBaseDB<Reservation> impleme
 
 				ofy().save().entities(passenger, reservation, flight);
 
-				queue.add(ofy().getTransaction(), TaskOptions.Builder.withUrl("/tasks/send_confirmation_email").param("email", passenger.getEmail()).param("reservationInfo", reservation.toString()));
+				queue.add(ofy().getTransaction(), TaskOptions.Builder.withUrl("/tasks/send_confirmation_email").param("email", passenger.getEmail())
+						.param("reservationInfo", reservation.toString()));
 
 				return reservation;
 			}
@@ -71,36 +67,12 @@ public final class ReservationDBImpl extends AbstractBaseDB<Reservation> impleme
 
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.ReservationDB#getUserReservations(ua.com.ukrelektro.flights.db.models.Passenger)
-	 */
 	@Override
-	public List<Reservation> getUserReservations(Passenger passenger) {
+	public List<Reservation> getPassengerReservations(Passenger passenger) {
 		Query<Reservation> query = ofy().load().type(Reservation.class).ancestor(passenger);
 		return query.list();
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.ReservationDB#getReservationOnNextDayFlight(java.util.Date)
-	 */
-	@Override
-	public List<Reservation> getReservationOnNextDayFlight(Date currentDay) {
-		// Date dateTest = new Date(1454316000000L);
-		Date startDate = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(startDate);
-		c.add(Calendar.DATE, 1);
-		Date endDate = c.getTime();
-
-		Iterable<Key<Flight>> queryFligths = ofy().load().type(Flight.class).filter("dateDepart >", startDate).filter("dateDepart <", endDate).keys();
-		Query<Reservation> query = ofy().load().type(Reservation.class).filter("flight in", queryFligths);
-
-		return query.list();
-	}
-
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.ReservationDB#deleteUserReservationById(ua.com.ukrelektro.flights.db.models.Passenger, java.lang.Long)
-	 */
 	@Override
 	public WrappedBoolean deleteUserReservationById(final Passenger passenger, final Long reservationId) throws ForbiddenException {
 		WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
@@ -126,45 +98,4 @@ public final class ReservationDBImpl extends AbstractBaseDB<Reservation> impleme
 
 		return result;
 	}
-
-	// if (user == null) {
-	// throw new UnauthorizedException("Authorization required");
-	// }
-	//
-	// WrappedBoolean result = ofy().transact(new Work<WrappedBoolean>() {
-	// @Override
-	// public WrappedBoolean run() {
-	// Key<Conference> conferenceKey = Key.create(websafeConferenceKey);
-	// Conference conference = ofy().load().key(conferenceKey).now();
-	// // 404 when there is no Conference with the given conferenceId.
-	// if (conference == null) {
-	// return new WrappedBoolean(false, "No Conference found with key: " +
-	// websafeConferenceKey);
-	// }
-	//
-	// // Un-registering from the Conference.
-	// Profile profile = getProfileFromUser(user);
-	// if (profile.getConferenceKeysToAttend().contains(websafeConferenceKey)) {
-	// profile.unregisterFromConference(websafeConferenceKey);
-	// conference.giveBackSeats(1);
-	// ofy().save().entities(profile, conference).now();
-	// return new WrappedBoolean(true);
-	// } else {
-	// return new WrappedBoolean(false, "You are not registered for this
-	// conference");
-	// }
-	// }
-	// });
-	// // if result is false
-	// if (!result.getResult()) {
-	// if (result.getReason().contains("No Conference found with key")) {
-	// throw new NotFoundException(result.getReason());
-	// } else {
-	// throw new ForbiddenException(result.getReason());
-	// }
-	// }
-	// // NotFoundException is actually thrown here.
-	// return new WrappedBoolean(result.getResult());
-	// }
-
 }

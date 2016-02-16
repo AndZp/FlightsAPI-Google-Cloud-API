@@ -64,7 +64,6 @@ public class FlightDBTest {
 	 */
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
 			new LocalDatastoreServiceTestConfig().setDefaultHighRepJobPolicyUnappliedJobPercentage(0));
-
 	Closeable session;
 
 	@BeforeClass

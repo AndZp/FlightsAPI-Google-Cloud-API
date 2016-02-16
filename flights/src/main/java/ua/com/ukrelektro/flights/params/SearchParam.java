@@ -11,7 +11,6 @@ public class SearchParam {
 	private Date toDate;
 
 	public SearchParam() {
-
 	}
 
 	public String getFromCountryName() {

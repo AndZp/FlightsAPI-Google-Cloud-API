@@ -3,7 +3,6 @@ package ua.com.ukrelektro.flights.db.helpers.impl;
 import static ua.com.ukrelektro.flights.db.service.OfyService.ofy;
 import static ua.com.ukrelektro.flights.utils.StringUtils.isNullOrEmpty;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.api.server.spi.response.NotFoundException;
@@ -36,33 +35,17 @@ public final class FlightDBImpl extends AbstractBaseDB<Flight> implements Flight
 		return instance;
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.FlightDB#getAllFlight()
-	 */
 	@Override
 	public List<Flight> getAllFlight() {
 		return getQueryAll(Flight.class).order("dateDepart").list();
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.FlightDB#getFlightByWebsafeKey(java.lang.String)
-	 */
 	@Override
 	public Flight getFlightByWebsafeKey(String websafeKey) throws NotFoundException {
 		return getByWebSafeKey(websafeKey, Flight.class);
 
 	}
 
-	public List<Flight> getFlightsCityToCityByName(String cityNameFrom, String cityNameTo) throws NotFoundException {
-		City cityFrom = cityDB.getCityByName(cityNameFrom);
-		City cityTo = cityDB.getCityByName(cityNameTo);
-
-		return getQueryAll(Flight.class).filter("cityFromRef =", cityFrom).filter("cityToRef =", cityTo).order("dateDepart").list();
-	}
-
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.FlightDB#getFlightById(java.lang.Long)
-	 */
 	@Override
 	public Flight getFlightById(Long id) throws NotFoundException {
 		Flight flight = getById(Flight.class, id);
@@ -72,14 +55,6 @@ public final class FlightDBImpl extends AbstractBaseDB<Flight> implements Flight
 		return flight;
 	}
 
-	public List<Flight> getFlightsByDepartDate(Date departDate) {
-		Query<Flight> query = ofy().load().type(Flight.class).filter("dateDepart =", departDate);
-		return query.list();
-	}
-
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.impl.FlightDB#getFlightsByFlightParam(ua.com.ukrelektro.flights.params.SearchParam)
-	 */
 	@Override
 	public List<Flight> getFlightsByFlightParam(SearchParam flightParam) throws NotFoundException {
 		Query<Flight> queryResults = getQueryAll(Flight.class);
@@ -93,6 +68,7 @@ public final class FlightDBImpl extends AbstractBaseDB<Flight> implements Flight
 		queryResults = addQueryByToDirection("cityToRef", flightParam, queryResults);
 
 		// Query by Dates
+		// Date for AppEngine explorer: 1985-04-12T23:20:50.520Z
 		if (flightParam.getFromDate() != null) {
 			queryResults = queryResults.filter("dateDepart >", flightParam.getFromDate());
 		}
@@ -104,7 +80,7 @@ public final class FlightDBImpl extends AbstractBaseDB<Flight> implements Flight
 		return queryResults.list();
 	}
 
-	// TODO: Refactoring this !
+	// TODO: Refactor this !
 	private Query<Flight> addQueryByFromDirection(String where, SearchParam flightParam, Query<Flight> queryAllFlights) throws NotFoundException {
 		if (!isNullOrEmpty(flightParam.getFromCityName())) {
 			City city = cityDB.getCityByName(flightParam.getFromCityName());

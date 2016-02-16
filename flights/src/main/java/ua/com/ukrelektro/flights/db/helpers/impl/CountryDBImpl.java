@@ -23,18 +23,12 @@ public final class CountryDBImpl extends AbstractBaseDB<Country> implements Coun
 		}
 		return instance;
 	}
-	
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.ICountryDB#getAllCountry()
-	 */
+
 	@Override
 	public List<Country> getAllCountry() {
 		return getQueryAll(Country.class).orderKey(false).list();
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.ICountryDB#getCitiesByCountry(java.lang.String)
-	 */
 	@Override
 	public List<City> getCitiesByCountry(String countryName) throws NotFoundException {
 		Country country = getCountryByName(countryName);
@@ -42,9 +36,6 @@ public final class CountryDBImpl extends AbstractBaseDB<Country> implements Coun
 		return query.list();
 	}
 
-	/* (non-Javadoc)
-	 * @see ua.com.ukrelektro.flights.db.helpers.ICountryDB#getCountryByName(java.lang.String)
-	 */
 	@Override
 	public Country getCountryByName(String name) throws NotFoundException {
 		Country country = getByKey(Country.class, name);

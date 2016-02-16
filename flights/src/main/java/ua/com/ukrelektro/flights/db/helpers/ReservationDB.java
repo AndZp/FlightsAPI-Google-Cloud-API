@@ -1,6 +1,5 @@
 package ua.com.ukrelektro.flights.db.helpers;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.api.server.spi.response.ForbiddenException;
@@ -14,9 +13,7 @@ public interface ReservationDB {
 
 	Reservation buyTicket(Passenger passenger, Flight flight);
 
-	List<Reservation> getUserReservations(Passenger passenger);
-
-	List<Reservation> getReservationOnNextDayFlight(Date currentDay);
+	List<Reservation> getPassengerReservations(Passenger passenger);
 
 	WrappedBoolean deleteUserReservationById(Passenger passenger, Long reservationId) throws ForbiddenException;
 

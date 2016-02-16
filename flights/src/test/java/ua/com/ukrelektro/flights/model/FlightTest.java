@@ -43,7 +43,7 @@ public class FlightTest {
 	private Flight flight;
 
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(
-			new LocalDatastoreServiceTestConfig().setDefaultHighRepJobPolicyUnappliedJobPercentage(100));
+			new LocalDatastoreServiceTestConfig().setDefaultHighRepJobPolicyUnappliedJobPercentage(0));
 	Closeable session;
 
 	@BeforeClass
